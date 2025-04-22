@@ -20,45 +20,49 @@ export default function AddBookScreeen({
   const [emailOfSeller, setEmailOfSeller] = useState(
     onSelectedItem?.email_of_seller ?? ""
   );
-  const [price, setPrice] = useState(onSelectedItem?.price ?? 0);
+  const [price, setPrice] = useState(onSelectedItem?.price ?? "");
   const [coverURL, setCoverURL] = useState(onSelectedItem?.cover ?? "");
 
-  const onStore = () => {
-    onSelectedItem?.id
-      ? modifyPost(
-          {
-            title: title,
-            author: author,
-            email_of_seller: emailOfSeller,
-            price: price,
-            cover: coverURL,
-          },
-          {
-            onSuccess: () => {
-              onCreateSuccess();
-              onClose();
-            },
-            onError: (err: any) => console.log(err),
-            id: onSelectedItem?.id,
-          }
-        )
-      : addPost(
-          {
-            title: title,
-            author: author,
-            email_of_seller: emailOfSeller,
-            price: price,
-            cover: coverURL,
-          },
-          {
-            onSuccess: () => {
-              onCreateSuccess();
-              onClose();
-            },
-            onError: (err: any) => console.log(err),
-          }
-        );
+  const createPost = () => {
+    addPost(
+      {
+        title: title,
+        author: author,
+        email_of_seller: emailOfSeller,
+        price: price,
+        cover: coverURL,
+      },
+      {
+        onSuccess: () => {
+          onCreateSuccess();
+          onClose();
+        },
+        onError: (err: any) => console.log(err),
+      }
+    );
+  };
 
+  const updatePost = () => {
+    modifyPost(
+      {
+        title: title,
+        author: author,
+        email_of_seller: emailOfSeller,
+        price: price,
+        cover: coverURL,
+      },
+      {
+        onSuccess: () => {
+          onCreateSuccess();
+          onClose();
+        },
+        onError: (err: any) => console.log(err),
+        id: onSelectedItem?.id,
+      }
+    );
+  };
+  const onStore = () => {
+    !!onSelectedItem ? updatePost() : createPost();
     onClose();
   };
   return (
